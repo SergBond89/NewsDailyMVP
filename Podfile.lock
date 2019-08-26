@@ -1,0 +1,20 @@
+PODS:
+  - Kingfisher (5.7.0)
+  - LanguageManager-iOS (1.1.5)
+
+DEPENDENCIES:
+  - Kingfisher (~> 5.7)
+  - LanguageManager-iOS
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Kingfisher
+    - LanguageManager-iOS
+
+SPEC CHECKSUMS:
+  Kingfisher: c7d211b54f1f30d8060aadab177d52b4349c825b
+  LanguageManager-iOS: db9b1795f428063b77b8e140f80d9a6894dcbcbd
+
+PODFILE CHECKSUM: 1f145a2397d8bce7ce5f320fb39d7aa396125b1a
+
+COCOAPODS: 1.7.4

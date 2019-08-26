@@ -1,0 +1,15 @@
+
+/* Class = "UILabel"; text = "Night mode"; ObjectID = "14R-gh-3ik"; */
+"14R-gh-3ik.text" = "Night mode";
+
+/* Class = "UILabel"; text = "Settings"; ObjectID = "Hx0-IT-M4h"; */
+"Hx0-IT-M4h.text" = "Settings";
+
+/* Class = "UISegmentedControl"; edM-VG-lmm.segmentTitles[0] = "ENG"; ObjectID = "edM-VG-lmm"; */
+"edM-VG-lmm.segmentTitles[0]" = "ENG";
+
+/* Class = "UISegmentedControl"; edM-VG-lmm.segmentTitles[1] = "RU"; ObjectID = "edM-VG-lmm"; */
+"edM-VG-lmm.segmentTitles[1]" = "RU";
+
+/* Class = "UILabel"; text = "Language"; ObjectID = "mch-EC-rIz"; */
+"mch-EC-rIz.text" = "Language";
