@@ -8,16 +8,18 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 protocol NewsDetailPresenterType {
     func newsDetailViewDidLoad()
     func saveToMyFavoriteNews()
+    func isNewsAlreadyExist() -> Bool
 }
 
 class NewsDetailPresenter {
     
-    fileprivate weak var view: NewsDetailViewControllerType?
-    fileprivate let article: Articles
+    private weak var view: NewsDetailViewControllerType?
+    private let article: Articles
 
     init(view: NewsDetailViewControllerType, article: Articles) {
         self.view = view
@@ -27,9 +29,11 @@ class NewsDetailPresenter {
 }
 
 extension NewsDetailPresenter: NewsDetailPresenterType {
+    
     func newsDetailViewDidLoad() {
         view?.updateScreen(withTitle: article.title, content: article.content, urlToImage: article.urlToImage, url: article.url)
     }
+    
     func saveToMyFavoriteNews() {
         if let contex = (UIApplication.shared.delegate as? AppDelegate)?.coreDataStack.persistentContainer.viewContext {
             let article = Article(context: contex)
@@ -50,6 +54,25 @@ extension NewsDetailPresenter: NewsDetailPresenterType {
                 print("Не удалось сохранить данные \(error)", error.localizedDescription)
             }
         }
+    }
+    
+    func isNewsAlreadyExist() -> Bool {
+        let fetchRequest: NSFetchRequest<Article> = Article.fetchRequest()
+        if let context = (UIApplication.shared.delegate as? AppDelegate)?.coreDataStack.persistentContainer.viewContext {
+            do {
+                let articles = try context.fetch(fetchRequest)
+                for data in articles {
+                    if (data.value(forKey: "title") != nil){
+                        if data.value(forKey: "title") as? String == self.article.title {
+                            return false
+                        }
+                    }
+                }
+            } catch let error {
+                print(error.localizedDescription)
+            }
+        }
+        return true
     }
     
 }

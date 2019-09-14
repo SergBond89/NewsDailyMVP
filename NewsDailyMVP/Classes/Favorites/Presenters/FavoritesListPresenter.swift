@@ -23,9 +23,9 @@ protocol FavoritesListPresenterType {
 
 class FavoritesListPresenter {
     
-    fileprivate weak var view: FavoritesListViewControllerType?
+    private weak var view: FavoritesListViewControllerType?
     var articles: [Article] = []
-    var news: [Articles] = []
+    private var news: [Articles] = []
     var fetchResultsController: NSFetchedResultsController<Article>!
     
     init(view: FavoritesListViewControllerType) {
@@ -38,7 +38,7 @@ class FavoritesListPresenter {
     }
     private func reloadNews() {
         let fetchRequest: NSFetchRequest<Article> = Article.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "date", ascending: true)
+        let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
         if let context = (UIApplication.shared.delegate as? AppDelegate)?.coreDataStack.persistentContainer.viewContext {
@@ -117,8 +117,7 @@ extension FavoritesListPresenter {
         let newsDetailViewController = NewsDetailViewController.createFromStoryboard(named: "NewsDetailViewController")
         
         newsDetailViewController.presenter = NewsDetailPresenter(view: newsDetailViewController, article: news[index])
-        newsDetailViewController.isEnableBarButtonItem = false
         let transactionListViewController = view as! FavoritesListViewController
-        transactionListViewController.navigationController?.present(newsDetailViewController, animated: true, completion: nil)
+        transactionListViewController.navigationController?.pushViewController(newsDetailViewController, animated: true)
     }
 }

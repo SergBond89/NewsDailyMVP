@@ -16,36 +16,37 @@ protocol NewsDetailViewControllerType: class {
 class NewsDetailViewController: UIViewController, StoryboardCreation {
     
     static var storyboardType = "News"
-    var isEnableBarButtonItem = true
     var presenter: NewsDetailPresenterType!
     private var urlToOpenInBrowser: String?
     
     @IBOutlet weak var articleImage: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var contentLabel: UILabel!
-    @IBOutlet weak var likeArticleButton: UIBarButtonItem!
     @IBOutlet weak var openInBrowserButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter.newsDetailViewDidLoad()
-        openInBrowserButton.setTitle(NSLocalizedString("Open in browser", comment: ""), for: .normal)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "like"), style: .plain, target: self, action: #selector(saveArticleInMyFavoriteNews))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "dismiss"), style: .plain, target: self, action: #selector(backButtonPressed))
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        likeArticleButton.isEnabled = isEnableBarButtonItem
+        tabBarController?.tabBar.isHidden = true
+        self.navigationItem.rightBarButtonItem?.isEnabled = presenter.isNewsAlreadyExist()
+    }
+    
+    @objc func saveArticleInMyFavoriteNews(){
+        presenter.saveToMyFavoriteNews()
+        self.navigationItem.rightBarButtonItem?.isEnabled = false
+    }
+    
+    @objc func backButtonPressed() {
+        self.navigationController?.popViewController(animated: true)
     }
     
     // MARK: - IBActions
-    
-    @IBAction func backButtonPressed(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
-    }
-    
-    @IBAction func saveArticleInMyFavoriteNews(_ sender: Any) {
-        presenter.saveToMyFavoriteNews()
-        likeArticleButton.isEnabled = false
-    }
     
     @IBAction func openInBrowser(_ sender: UIButton) {
         guard let url = urlToOpenInBrowser else { return }

@@ -8,7 +8,7 @@
 
 import UIKit
 import CoreData
-import LanguageManager_iOS
+import L10n_swift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,7 +18,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        LanguageManager.shared.defaultLanguage = .ru
+        
+        let currentLangCode = Locale.init(identifier: PrefsManager.current.lang).languageCode!
+        
+        if !L10n.shared.supportedLanguages.contains(currentLangCode){
+            L10n.shared.language = "en"
+        }else{
+            L10n.shared.language = currentLangCode
+        }
+        
         return true
     }
 

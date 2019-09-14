@@ -12,6 +12,7 @@ protocol NewsListViewControllerType: class {
     func updateList()
     func setTitle()
     func addPikerView()
+    func updateListAfterChangeCountryAndCategory()
 }
 
 class NewsListViewController: UIViewController {
@@ -29,6 +30,11 @@ class NewsListViewController: UIViewController {
         presenter.newsListViewDidLoad()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        tabBarController?.tabBar.isHidden = false
+    }
+    
     func configureTableView() {
         tableView.dataSource = self
         tableView.delegate = self
@@ -43,11 +49,22 @@ class NewsListViewController: UIViewController {
 // MARK: - NewsListViewControllerType
 
 extension NewsListViewController: NewsListViewControllerType {
+    
     func updateList() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
     }
+    
+    func updateListAfterChangeCountryAndCategory() {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+            if self.tableView.numberOfRows(inSection: 0) != 0 {
+                self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+            }
+        }
+    }
+    
     func addPikerView() {
         picker.delegate = self
         picker.frame = CGRect(x: 0, y: Int(UIScreen.main.bounds.height - 264), width: Int(UIScreen.main.bounds.width), height: 216)
@@ -58,9 +75,10 @@ extension NewsListViewController: NewsListViewControllerType {
         view.addSubview(picker)
         addToolbar()
     }
+    
     func addToolbar() {
         toolBar = UIToolbar.init(frame: CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 314, width: UIScreen.main.bounds.size.width, height: 50))
-        let doneButton = UIBarButtonItem(title: NSLocalizedString("Done", comment: ""),
+        let doneButton = UIBarButtonItem(title: lsDone,
                                          style: .plain,
                                          target: self,
                                          action: #selector(dismissPickerView))
@@ -71,13 +89,14 @@ extension NewsListViewController: NewsListViewControllerType {
     }
     
     @objc func dismissPickerView() {
-        presenter.newsListViewDidLoad()
+        presenter.resetArticles()
+        presenter.newsListUpdate()
         toolBar.removeFromSuperview()
         picker.removeFromSuperview()
     }
     
     func setTitle() {
-        navigationItem.title = NSLocalizedString("Top News", comment: "")
+        navigationItem.title = lsTopNews
     }
 }
 

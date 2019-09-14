@@ -17,7 +17,9 @@ protocol NewsListPresenterType {
     func getIdCountryByIndex(_ index: Int) -> String
     func changeSelectedCountry(_ country: String)
     func changeSelectedCategory(_ category: String)
+    func resetArticles()
     func newsListViewDidLoad()
+    func newsListUpdate()
     func createPickerView()
     func configure(_ cell: NewsListCellType, forRow row: Int)
     func newsWasSelected(with index: Int)
@@ -27,17 +29,17 @@ protocol NewsListPresenterType {
 class NewsListPresenter {
     
     
-    fileprivate weak var view: NewsListViewControllerType?
-    fileprivate var articles: [Articles] = []
-    fileprivate let countries = NewsAPICountry.allCases
-    fileprivate let categories = NewsAPICategories.allCases
-    fileprivate var countriesID: [String] = []
-    var selectedCountry = "us"
-    var selectedCategory = ""
+    private weak var view: NewsListViewControllerType?
+    private var articles: [Articles] = []
+    private let countries = NewsAPICountry.allCases
+    private let categories = NewsAPICategories.allCases
+    private var countriesID: [String] = []
+    private var selectedCountry = "us"
+    private var selectedCategory = ""
     private var numberOfPage = 1
     private var isNextPage = false
     
-    fileprivate let apiManager: NewsAPIManager
+    private let apiManager: NewsAPIManager
     
     init(view: NewsListViewControllerType, apiManager: NewsAPIManager = NewsAPIManager()) {
         self.view = view
@@ -131,13 +133,22 @@ extension NewsListPresenter: NewsListPresenterType {
         selectedCategory = category
     }
     
+    func resetArticles(){
+        articles = []
+    }
+    
     func newsListViewDidLoad() {
         fetchNews()
         view?.setTitle()
+        view?.updateList()
+    }
+    
+    func newsListUpdate() {
+        fetchNews()
+        view?.updateListAfterChangeCountryAndCategory()
     }
     
     func createPickerView() {
-        articles = []
         numberOfPage = 1
         isNextPage = false
         view?.addPikerView()
@@ -177,7 +188,7 @@ extension NewsListPresenter {
         newsDetailViewController.presenter = NewsDetailPresenter(view: newsDetailViewController, article: articles[index])
         
         let transactionListViewController = view as! NewsListViewController
-        transactionListViewController.navigationController?.present(newsDetailViewController, animated: true, completion: nil)
+        transactionListViewController.navigationController?.pushViewController(newsDetailViewController, animated: true)
     }
 }
 

@@ -5,5 +5,6 @@ target 'NewsDailyMVP' do
 
   pod 'Kingfisher', '~> 5.7'
   pod 'LanguageManager-iOS'
+  pod 'L10n-swift', '~> 5.5'
 
 end

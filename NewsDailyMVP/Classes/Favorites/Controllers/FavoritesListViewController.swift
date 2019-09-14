@@ -22,6 +22,7 @@ class FavoritesListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.tableFooterView = UIView()
         presenter = FavoritesListPresenter(view: self)
         configureTableView()
         presenter.newsListViewDidLoad()
@@ -30,6 +31,7 @@ class FavoritesListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         presenter.newsListViewWillAppear()
         presenter.fetchResultsController.delegate = self
+        tabBarController?.tabBar.isHidden = false
     }
     
     func configureTableView() {
@@ -48,7 +50,7 @@ extension FavoritesListViewController: FavoritesListViewControllerType {
         }
     }
     func setTitle() {
-        navigationItem.title = NSLocalizedString("Favorites News", comment: "")
+        navigationItem.title = lsFavoritesNews
     }
 }
 
@@ -104,7 +106,7 @@ extension FavoritesListViewController: UITableViewDataSource, UITableViewDelegat
         tableView.deselectRow(at: indexPath, animated: true)
     }
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let delete = UITableViewRowAction(style: .default, title: NSLocalizedString("Delete", comment: "")) { (action, indexPath) in
+        let delete = UITableViewRowAction(style: .default, title: lsDelete) { (action, indexPath) in
             self.presenter.deleteArticle(by: indexPath)
         }
         delete.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
