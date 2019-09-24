@@ -1,0 +1,6 @@
+module L10n_swift {
+  umbrella header "L10n-swift-umbrella.h"
+
+  export *
+  module * { export * }
+}
